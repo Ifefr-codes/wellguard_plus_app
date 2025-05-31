@@ -39,7 +39,3 @@ if casing_check:
 
 st.write("🔍 Filtered Well Data Based on Selection")
 st.dataframe(filtered_df)
-
-# 🔹 Add Downloadable Report Feature
-csv = filtered_df.to_csv(index=False).encode('utf-8')
-st.download_button("📥 Download Filtered Data as CSV", csv, "filtered_well_data.csv", "text/csv", key="download-csv")
