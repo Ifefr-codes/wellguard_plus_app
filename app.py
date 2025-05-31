@@ -4,8 +4,8 @@ import pandas as pd
 st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
 
-# 🔹 Load dataset automatically
-df = pd.read_csv("data/well_data.csv", parse_dates=['timestamp'])
+# 🔹 Load dataset automatically—no file upload needed
+df = pd.read_csv("data/well_data.csv")
 
 st.success("✅ Using preloaded dataset. Preview below:")
 st.dataframe(df)
@@ -28,4 +28,3 @@ selected_data = df.loc[selected_row]
 
 st.write("🔍 Selected Well Data for Analysis")
 st.write(selected_data)
-
