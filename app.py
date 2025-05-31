@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 
+# 🔹 Set page config FIRST to avoid Streamlit errors
+st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
+
 # Custom Styling for a Cleaner UI
 st.markdown("""
     <style>
@@ -13,7 +16,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
 
 # Load dataset automatically
@@ -56,14 +58,4 @@ st.dataframe(filtered_df)
 st.subheader("🧠 Integrity Analysis Results")
 for i, row in filtered_df.iterrows():
     result = ""
-    if row['gas_type'].lower() == "hydrogen":
-        if row['material_type'].lower() != "13cr" and row['temperature'] > 70:
-            result = f"<span class='risk-high'>⚠️ Row {i+2}: High risk of embrittlement! Use CRA.</span>"
-        elif row['pressure'] < 1000:
-            result = f"<span class='risk-medium'>🔻 Row {i+2}: Pressure drop detected! Check casing integrity.</span>"
-        else:
-            result = f"<span class='risk-low'>✅ Row {i+2}: Conditions appear safe.</span>"
-    else:
-        result = f"<span class='risk-low'>ℹ️ Row {i+2}: Gas type '{row['gas_type']}' — No hydrogen-specific risk.</span>"
-    
-    st.markdown(result, unsafe_allow_html=True)
+    if row['gas_type'].
