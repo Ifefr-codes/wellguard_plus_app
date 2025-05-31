@@ -1,6 +1,18 @@
 import streamlit as st
 import pandas as pd
 
+# Custom Styling for a Cleaner UI
+st.markdown("""
+    <style>
+        .main { background-color: #f0f2f6; }
+        h1 { color: #0048BA; text-align: center; }
+        .report-container { padding: 20px; background: white; border-radius: 10px; }
+        .risk-high { color: red; font-weight: bold; }
+        .risk-medium { color: orange; font-weight: bold; }
+        .risk-low { color: green; font-weight: bold; }
+    </style>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
 
@@ -37,39 +49,21 @@ filtered_df = df[
 if casing_check:
     filtered_df = filtered_df[filtered_df["pressure"] < 1000]
 
-st.write("🔍 Filtered Well Data Based on Selection")
+st.write("🔍 **Filtered Well Data Based on Selection**")
 st.dataframe(filtered_df)
 
 # 🧠 Integrity Analysis Results for Selected Data
 st.subheader("🧠 Integrity Analysis Results")
 for i, row in filtered_df.iterrows():
+    result = ""
     if row['gas_type'].lower() == "hydrogen":
         if row['material_type'].lower() != "13cr" and row['temperature'] > 70:
-            st.error(f"Row {i+2}: ⚠️ High risk of embrittlement — use CRA instead of {row['material_type']}")
+            result = f"<span class='risk-high'>⚠️ Row {i+2}: High risk of embrittlement! Use CRA.</span>"
         elif row['pressure'] < 1000:
-            st.warning(f"Row {i+2}: 🔻 Pressure drop detected. Check for casing integrity.")
+            result = f"<span class='risk-medium'>🔻 Row {i+2}: Pressure drop detected! Check casing integrity.</span>"
         else:
-            st.success(f"Row {i+2}: ✅ Conditions appear safe.")
+            result = f"<span class='risk-low'>✅ Row {i+2}: Conditions appear safe.</span>"
     else:
-        st.info(f"Row {i+2}: ℹ️ Gas type '{row['gas_type']}' — no hydrogen-specific risk.")
-st.markdown("""
-<style>
-.main {
-    background-color: #f0f2f6;
-}
-</style>
-""", unsafe_allow_html=True)
-for i, row in filtered_df.iterrows():
-    if row['gas_type'].lower() == "hydrogen":
-        if row['material_type'].lower() != "13cr" and row['temperature'] > 70:
-            st.markdown(f"<span style='color:red'>⚠️ Row {i+2}: High risk of embrittlement!</span>", unsafe_allow_html=True)
-        elif row['pressure'] < 1000:
-            st.markdown(f"<span style='color:orange'>🔻 Row {i+2}: Pressure drop detected!</span>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<span style='color:green'>✅ Row {i+2}: Conditions appear safe.</span>", unsafe_allow_html=True)
-st.success("✅ Safe Condition Detected!")
-st.warning("⚠️ Potential Risk Identified!")
-st.error("❌ Critical Issue Found!")
-with st.container():
-    st.markdown("<h3 style='color:blue;'>Well Integrity Report</h3>", unsafe_allow_html=True)
-    st.dataframe(filtered_df)
+        result = f"<span class='risk-low'>ℹ️ Row {i+2}: Gas type '{row['gas_type']}' — No hydrogen-specific risk.</span>"
+    
+    st.markdown(result, unsafe_allow_html=True)
