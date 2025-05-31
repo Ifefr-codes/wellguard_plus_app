@@ -1,0 +1,11 @@
+timestamp,pressure,temperature,gas_type,material_type
+2025-01-01 00:00:00,1200,68,hydrogen,13Cr
+2025-01-01 01:00:00,1180,69,hydrogen,13Cr
+2025-01-01 02:00:00,1150,70,hydrogen,carbon_steel
+2025-01-01 03:00:00,1120,71,hydrogen,carbon_steel
+2025-01-01 04:00:00,1100,72,hydrogen,13Cr
+2025-01-01 05:00:00,1070,73,hydrogen,carbon_steel
+2025-01-01 06:00:00,1050,74,hydrogen,13Cr
+2025-01-01 07:00:00,1020,75,hydrogen,carbon_steel
+2025-01-01 08:00:00,980,76,hydrogen,carbon_steel
+2025-01-01 09:00:00,950,77,hydrogen,13Cr
