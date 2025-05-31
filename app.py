@@ -35,7 +35,20 @@ filtered_df = df[
 
 # Apply casing integrity filter if selected
 if casing_check:
-    filtered_df = filtered_df[filtered_df["pressure"] < 1000]  # Example condition
+    filtered_df = filtered_df[filtered_df["pressure"] < 1000]
 
 st.write("🔍 Filtered Well Data Based on Selection")
 st.dataframe(filtered_df)
+
+# 🧠 Integrity Analysis Results for Selected Data
+st.subheader("🧠 Integrity Analysis Results")
+for i, row in filtered_df.iterrows():
+    if row['gas_type'].lower() == "hydrogen":
+        if row['material_type'].lower() != "13cr" and row['temperature'] > 70:
+            st.error(f"Row {i+2}: ⚠️ High risk of embrittlement — use CRA instead of {row['material_type']}")
+        elif row['pressure'] < 1000:
+            st.warning(f"Row {i+2}: 🔻 Pressure drop detected. Check for casing integrity.")
+        else:
+            st.success(f"Row {i+2}: ✅ Conditions appear safe.")
+    else:
+        st.info(f"Row {i+2}: ℹ️ Gas type '{row['gas_type']}' — no hydrogen-specific risk.")
