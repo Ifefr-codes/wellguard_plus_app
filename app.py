@@ -58,4 +58,4 @@ st.dataframe(filtered_df)
 st.subheader("🧠 Integrity Analysis Results")
 for i, row in filtered_df.iterrows():
     result = ""
-    if row['gas_type'].
+if row['gas_type'].lower() == "hydrogen":
