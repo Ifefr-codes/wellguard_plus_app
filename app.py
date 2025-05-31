@@ -58,4 +58,13 @@ st.dataframe(filtered_df)
 st.subheader("🧠 Integrity Analysis Results")
 for i, row in filtered_df.iterrows():
     result = ""
-if row['gas_type'].lower() == "hydrogen":
+for i, row in filtered_df.iterrows():
+    if row['gas_type'].lower() == "hydrogen":
+        if row['material_type'].lower() != "13cr" and row['temperature'] > 70:
+            st.markdown(f"<span class='risk-high'>⚠️ Row {i+2}: High risk of embrittlement! Use CRA.</span>", unsafe_allow_html=True)
+        elif row['pressure'] < 1000:
+            st.markdown(f"<span class='risk-medium'>🔻 Row {i+2}: Pressure drop detected! Check casing integrity.</span>", unsafe_allow_html=True)
+        else:
+            st.markdown(f"<span class='risk-low'>✅ Row {i+2}: Conditions appear safe.</span>", unsafe_allow_html=True)
+    else:
+        st.markdown(f"<span class='risk-low'>ℹ️ Row {i+2}: Gas type '{row['gas_type']}' — No hydrogen-specific risk.</span>", unsafe_allow_html=True)
