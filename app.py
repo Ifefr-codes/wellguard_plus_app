@@ -5,40 +5,63 @@ import matplotlib.pyplot as plt
 # 🔹 Set Page Config First
 st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 
+# 🔹 Apply Background Image (Update the file path!)
+background_image = "background.jpg"  # Replace with the image file from your report/PPT
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url('{background_image}');
+        background-size: cover;
+        background-position: center;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
 
-# Load dataset
-df = pd.read_csv("data/well_data.csv")
+# 🔹 Hourly Data Options
+time_stamps = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00"]
+pressure_options = {
+    "00:00": [1200, 1000], "01:00": [1180, 1480], "02:00": [1150, 1500], "03:00": [1120, 9000],
+    "04:00": [1100, 1300], "05:00": [1070, 1080], "06:00": [1050, 1450], "07:00": [1020, 1022],
+    "08:00": [980, 990], "09:00": [750, 950]
+}
+temperature_options = {
+    "00:00": [68, 67], "01:00": [69, 65], "02:00": [70, 62], "03:00": [71, 82], "04:00": [72, 83],
+    "05:00": [73, 84], "06:00": [74, 64], "07:00": [75, 64], "08:00": [76, 86], "09:00": [77, 87]
+}
 
-st.success("✅ Using preloaded dataset. Preview below:")
-st.dataframe(df)
+# 🔹 User Input for Pressure & Temperature at Each Timestamp
+selected_data = []
+st.subheader("📊 Enter Hourly Pressure & Temperature Data")
+for timestamp in time_stamps:
+    st.markdown(f"**🕒 Timestamp: {timestamp}**")
+    
+    pressure_choice = st.selectbox(f"Select Pressure for {timestamp}", pressure_options[timestamp], key=f"pressure_{timestamp}")
+    temperature_choice = st.selectbox(f"Select Temperature for {timestamp}", temperature_options[timestamp], key=f"temperature_{timestamp}")
 
-# 🔹 Completion Cost Estimation
-completion_type = st.selectbox("Select Completion Type", ["Cased Hole", "Open Hole", "Hybrid"])
-cost_mapping = {"Cased Hole": 2.5, "Open Hole": 1.8, "Hybrid": 3.2}  # Example cost multipliers
-estimated_cost = cost_mapping[completion_type] * 1_000_000  # Example CAPEX scaling
-st.write(f"💰 Estimated CAPEX for **{completion_type} Completion**: **${estimated_cost:,}**")
+    selected_data.append({"Timestamp": timestamp, "Pressure": pressure_choice, "Temperature": temperature_choice})
 
-# 🔹 Microbial Corrosion Risk Check
-if st.checkbox("Enable Microbial Corrosion Risk Alerts"):
-    st.warning("⚠️ Hydrogen storage in porous media can trigger sulfate-reducing bacteria. Consider biocide treatment.")
+# 🔹 Convert Selections to DataFrame
+df_selected = pd.DataFrame(selected_data)
 
-# 🔹 Plot Pressure & Temperature Trends
-fig, ax = plt.subplots()
-ax.plot(df["pressure"], label="Pressure (psi)", color="blue")
-ax.plot(df["temperature"], label="Temperature (°C)", color="red")
-ax.set_xlabel("Well Data Entries")
-ax.set_ylabel("Values")
-ax.legend()
-st.pyplot(fig)
+# 🔹 Generate Graph AFTER Selections Are Made
+if len(selected_data) == len(time_stamps):
+    st.subheader("📊 Pressure & Temperature Trends Over Time")
+    fig, ax = plt.subplots()
+    ax.plot(df_selected["Timestamp"], df_selected["Pressure"], label="Pressure (psi)", color="blue", marker="o")
+    ax.plot(df_selected["Timestamp"], df_selected["Temperature"], label="Temperature (°C)", color="red", marker="s")
+    ax.set_xlabel("Timestamp")
+    ax.set_ylabel("Values")
+    ax.legend()
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
 
-# 🔹 Integrity Analysis
-st.subheader("🧠 Integrity Analysis Results")
-for i, row in df.iterrows():
-    if row['gas_type'].lower() == "hydrogen":
-        if row['material_type'].lower() != "13cr" and row['temperature'] > 70:
-            st.error(f"⚠️ Row {i+2}: High risk of embrittlement — use CRA.")
-        elif row['pressure'] < 1000:
-            st.warning(f"🔻 Row {i+2}: Pressure drop detected. Check casing integrity.")
-        else:
-            st.success(f"✅ Row {i+2}: Conditions appear safe.")
+# 🔹 Admin Access Control: Show Logged Data Only for Admins
+is_admin = st.checkbox("Admin Access")
+if is_admin:
+    st.subheader("🔍 Admin View: Logged Selections")
+    st.dataframe(df_selected)
