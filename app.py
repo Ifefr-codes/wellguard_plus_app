@@ -6,16 +6,16 @@ import os
 # 🔹 Set Page Config
 st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 
-st.title("🛡️ WellGuard+ | Group 1 Well Completion Analyzer")
+st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
 
-# 🔹 Apply Background Image Styling (Now Properly Adjusted)
+# 🔹 Apply Background Image Styling (Ensuring Proper Detection)
 if os.path.exists("background.jpg"):
-    st.image("background.jpg", use_column_width=True)  # Direct Image Display
+    st.image("background.jpg", use_container_width=True)  # Direct Image Display
     st.markdown(
         """
         <style>
         .stApp {
-            background: url('background.jpg') no-repeat center center fixed;
+            background: url("background.jpg") no-repeat center center fixed;
             background-size: cover;
         }
         </style>
