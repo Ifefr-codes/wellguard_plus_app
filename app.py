@@ -9,21 +9,22 @@ st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
 
 # 🔹 Apply Background Image Styling (Ensuring Proper Detection)
-if os.path.exists("background.jpg"):
-    st.image("background.jpg", use_container_width=True)  # Direct Image Display
+bg_path = "background.png"
+if os.path.exists(bg_path):
+    st.image(bg_path, use_container_width=True)  # Direct Image Display
     st.markdown(
-        """
+        f"""
         <style>
-        .stApp {
-            background: url("background.jpg") no-repeat center center fixed;
+        .stApp {{
+            background: url("{bg_path}") no-repeat center center fixed;
             background-size: cover;
-        }
+        }}
         </style>
         """,
         unsafe_allow_html=True
     )
 else:
-    st.warning("⚠️ Background image not found. Ensure 'background.jpg' is in your project folder.")
+    st.warning(f"⚠️ Background image not found. Ensure '{bg_path}' is in your project folder.")
 
 # 🔹 Hourly Data Options (User Must Manually Select Values)
 time_stamps = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00"]
