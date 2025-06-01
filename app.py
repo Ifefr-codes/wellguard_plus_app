@@ -6,23 +6,24 @@ import os
 # 🔹 Set Page Config
 st.set_page_config(page_title="WellGuard+ Analyzer", layout="wide")
 
-st.title("🛡️ WellGuard+ | Intelligent Well Completion Analyzer")
+st.title("🛡️ WellGuard+ | Group 1 Well Completion Analyzer")
 
 # 🔹 Apply Background Image Styling (Ensuring Proper Detection)
 bg_path = "background.png"
 if os.path.exists(bg_path):
     st.image(bg_path, use_container_width=True)  # Direct Image Display
     st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background: url("{bg_path}") no-repeat center center fixed;
-            background-size: cover;
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    f"""
+    <style>
+    .stApp {{
+        background: url("background.png") no-repeat center center fixed;
+        background-size: 25% auto;  /* Shrinks the image to half A4 size */
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 else:
     st.warning(f"⚠️ Background image not found. Ensure '{bg_path}' is in your project folder.")
 
