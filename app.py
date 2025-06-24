@@ -1,7 +1,10 @@
 import streamlit as st
 import pandas as pd
+import matplotlib  # ✅ Add this
+matplotlib.use("Agg")  # ✅ Force headless backend for compatibility
 import matplotlib.pyplot as plt
 import os
+
 
 # 🔹 Read secrets
 PASSCODE = st.secrets.get("admin_passcode", "")
